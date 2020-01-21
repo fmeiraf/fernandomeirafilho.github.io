@@ -1,0 +1,24 @@
+<header class="site-header" role="banner">
+
+  <div class="wrapper">
+    {%- assign default_paths = site.pages | map: "path" -%}
+    {%- assign page_paths = site.header_pages | default: default_paths -%}
+    <a class="site-title" rel="author" href="{{ "/" | relative_url }}">{{ site.title | escape }}</a>
+
+    {%- if page_paths -%}
+    <center>
+        <nav class="site-nav">
+          {% for link in site.data.navigation.main %}
+          {% if link.url contains "http" %}
+            {% assign url = link.url %}
+          {% else %}
+            {% assign url = link.url | relative_url %}
+          {% endif %}
+          <a class="page-link" href="{{ url }}">{{ link.title }}</a>
+          {% endfor %}
+          {%- include social_lean.html -%}
+        </nav>
+      </center>
+    {%- endif -%}
+  </div>
+</header>
