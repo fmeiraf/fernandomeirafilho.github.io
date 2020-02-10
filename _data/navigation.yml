@@ -2,13 +2,9 @@
 # pages in order as they should show up.
 
 main:
-  - title: "Web Dev Projects"
+  - title: "Projects"
     url: /projects/
   - title: "Data Analysis & Writing"
     url: /blog/
   - title: "About"
     url: /about/
-
-
-
-  
