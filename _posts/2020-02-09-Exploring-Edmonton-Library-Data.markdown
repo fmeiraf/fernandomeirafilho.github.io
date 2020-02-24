@@ -14,25 +14,13 @@ categories: jekyll update
 
 ---
 _
-- [Intro](#intro)
 - [The Data](#data)
-- [The LRT and the Edmonton Library Scene](#success)
-<!-- - [Publication year](#publication) -->
-- [We are all about the Fiction here](#fiction)
-- [The self-help effect and genre evolution](#evolution)
-- [(Sort of) Conclusion](#conclusion)
-
-
-
-## <a id="intro"> </a>
-## **Intro**
-
-So, this was a free exploration project. It means that no specific goal was demanded other than look into the data and try to find meaningful patterns. Due to the small amount of available features, I opted to make a data exploration focusing more on visualizing than applying statistical models, and try to answers some questions I already had :
-
-- What are the all time successes?
-- Are the successes consistent in all branches?
-- **Is there any meaningful patterns concerning the genres?**
-- Geographical exploration of genre distribution in the branches
+- [Intro](#intro)
+- [Understanding branch size](#bsize)
+- [A new wave of holdings](#wave)
+- [A tale of 3 stories](#genres)
+- [Diversity is in the small .. at first](#small)
+- [Conclusion](#conclusion)
 
 
 ## <a id="data"> </a>
@@ -40,157 +28,478 @@ So, this was a free exploration project. It means that no specific goal was dema
 This is an overall exploration of the [Edmonton Public Library Dataset](https://data.edmonton.ca/Community-Centres/Most-Popular-Books-by-Branch-Edmonton-Public-Libra/qdgm-hex6). A brief description of the dataset from the official provider:
 >_"A snapshot of the top ten books with the highest number of holds at Edmonton Public Library, each week from 9 AM Monday to 9 AM Monday, organized by customer home library branch."_
 
-For this specific exploration I added the **genre** and **publishing date** features (which was missing in the original dataset) using the [Google Books API for python](https://github.com/hoffmann/googlebooks). If you would like to see how this was done technically, please check the Github repo.
+For this specific exploration, I added the **genre**, **publishing date** and **google books rating** features (which were missing in the original dataset) using the [Google Books API for python](https://github.com/hoffmann/googlebooks). 
 
-## <a id="success"> </a>
-## **The LRT and the Edmonton Library Scene**
+It is very important to state that: once we didn't have the actual ISBN serial number of the books in the dataset - neither it was possible to obtain this information in the EPL website - **the script used to bring this data (using the API) was based in a voting system for the most similar API matches - using the book title and the author - for each book**.  _If you would like to see how this was done technically, please check the Github repo_.
 
-So, guess what this two images have in common?
+This implies that these additional features are not 100% accurate, but it was the best possible, considering the resources I had. I would add on top of that, using some samples and manual check, that genre is by far the most reliable feature, with publishing dates and ratings being less accurate - considering that each book can have different editions and other aspects.
 
-![train](/assets/posts/library/train_girl.png)
+#### A snapshot of the dataset
 
-It seems that they say a lot when we look for the all time successes in holdings:
+<table border="1" width="200" class="dataframe">
+    <thead>
+        <tr style="text-align: center; height:50%; font-size:15px;">
+            <th></th>      
+            <th>row_id</th>      
+            <th>branch_id</th>      
+            <th>branch_name</th>      
+            <th>holds</th>      
+            <th>title</th>      
+            <th>author</th>      
+            <th>date</th>      
+            <th>url</th>      
+            <th>google_rating</th>      
+            <th>publishing_Date</th>      
+            <th>genre</th>      
+            <th>hold_year</th>    
+            </tr>  
+        </thead>  
+        <tbody >    
+            <tr style="text-align: center; height:50%; font-size:13px;">      
+                <th>0</th>      
+                <td >EPLLON20150316The girl on the train / Paula Hawkins</td>      
+                <td >EPLLON</td>      
+                <td>Londonderry Branch</td>      
+                <td>36</td>      
+                <td >The girl on the train</td>      
+                <td>Hawkins Paula</td>      
+                <td>2015-03-16</td>     
+                 <td >http://epl.bibliocommons.com/search?t=smart&amp;q=the%20girl%20on</td>      
+                 <td>3.5</td>      
+                 <td>2015.0</td>      
+                 <td>Fiction</td>      
+                 <td>2015</td>    
+            </tr>  
+        </tbody>
+</table>
 
-![train](/assets/posts/library/allTimeHolds.png)
+<p align="center"> <em> table 1: Dataset snapshot </em> </p>
 
-So, **The girl on the train is the all time favorite**!
+The features:
 
-The first thing that comes into mind is: is this result the same in the majority of branches or is this the influence of specific (and more crowded) branches?
+- **row_id**: a unique identifier for each row (the join of title, data, author and branch id)
+- **branch_id**: a unique identifier for each branch
+- **branch_name**: the complete name of each branch
+- **holds**: the number of holds for the title in that week (date)
+- **title**: the title of the book
+- **author**: the author of the book
+- **date**: the first day of the week being featured
+- **url**: url for the search in the EPL website using the book title as a parameter
+- **google_rating**: the google books rating for that title
+- **publishing_Date**: the year of publication of the book 
+- **genre**: the genre of the book
+- **hold_year**: the year component of the **date** feature
 
-One way to figure it out is to plot the number of holdings together with the _number of appearances in the weekly top 10 (that way we could weigh down crowded libraries and make their participation equal to others)_ :
 
- ![train](/assets/posts/library/hold_appear.png)
+#### A brief description of the data available
 
-We could say that, for the top 3, this seems to make sense (more holds equals more appearances). But, when we expand this for the subsequent titles like _The subtle art of not giving a f*ck_, _Into the water_ and _12 rules for life_ this argument does not hold. This could be for 2 reasons:
+<table border="1" class="dataframe" style="width:50px;">  
+    <thead>    
+        <tr style="text-align: right;">      
+            <th></th>      
+            <th>row_id</th>      
+            <th>branch_id</th>      
+            <th>branch_name</th>      
+            <th>holds</th>      
+            <th>title</th>      
+            <th>author</th>      
+            <th>url</th>      
+            <th>google_rating</th>      
+            <th>publishing_Date</th>     
+            <th>genre</th>      
+            <th>hold_year</th>    
+        </tr>  
+     </thead>  
+     <tbody>    
+        <tr style="text-align: center; height:50%; font-size:13px;">      
+            <th>count</th>     
+            <td>32300</td>      
+            <td>32300</td>      
+            <td>32300</td>      
+            <td>32300.0</td>      
+            <td>32300</td>      
+            <td style="background-color:yellow;">32134</td>     
+            <td>32300</td>      
+            <td style="background-color:yellow;">23963.0</td>      
+            <td>32300.0</td>      
+            <td style="background-color:yellow;">32289</td>      
+            <td>32300.0</td>    
+            </tr>    
+        <tr style="text-align: center; height:50%; font-size:13px;">      
+            <th>unique</th>      
+            <td>32300</td>      
+            <td>22</td>      
+            <td>22</td>      
+            <td>0.0</td>      
+            <td>3312</td>      
+            <td>2375</td>      
+            <td>3414</td>      
+            <td>0.0</td>      
+            <td>0.0</td>     
+            <td>63</td>      
+            <td>0.0</td>    
+        </tr>  
+    </tbody>
+</table>
 
-1. These titles (with less appearances) could be fruit of a momentary trend.
-2. The hold numbers for these titles could be concentrated in branches with natural elevated hold numbers.
+<p align="center"> <em> table 2: Data summary </em> </p>
 
-Let's check for both hypothesis:
+Data uniqueness info:
 
-#### 1. Momentary trend hypothesis:
+- We have 22 different branches being analyzed;
+- 3312 different titles and 2375 different authors were featured in the dataset;
+- We had 63 different genres being represented in the dataset;
 
-![train](/assets/posts/library/moment_trend.png)
+Data availability:
 
-Above we can see the top 4-6 books from our rank of the all time favorites. We can see that the only title here that could not configure for a momentary trend is the _The subtle art of not giving a f*ck_ - which was able to maintain the demand for years after it's launch (which was Sep 2016). But when we take a look at the other two, we can see that it was a spike effect in the year of their launch: 2017, for _Into the water_ and 2018 for _12 rules for life_.
+- We have few lines without **author** information;
+- For the **google_rating** feature, in approximately 25% of the data, it was not possible to get this information;
+- We had a few lines without the genre information (actually just 3 books);
 
-#### 2. Concentration hypothesis:
+One very important detail about data availability: 
 
-To check this hypothesis, we need to do 2 things:
+<table border="1" class="dataframe">  
+    <thead>    
+        <tr style="text-align: center;">      
+        <th></th>      
+        <th>hold_year</th>      
+        <th>total_data_points</th>     
+        <th>number_of_months_available</th>    
+        </tr>  
+    </thead> 
+    <tbody style="text-align: center;">   
+        <tr>      
+            <th>0</th>      
+            <td>2015</td>      
+            <td>8644</td>      
+            <td>11</td>    
+        </tr>    
+        <tr>      
+            <th>1</th>      
+            <td>2016</td>      
+            <td>8709</td>      
+            <td>11</td>    
+        </tr>    
+        <tr>      
+            <th>2</th>      
+            <td>2017</td>      
+            <td style="background-color: yellow;">6481</td>      
+            <td style="background-color: yellow;">9</td>    
+        </tr>    
+        <tr>      
+        <th>3</th>      
+        <td>2018</td>     
+            <td style="background-color: yellow;">8256</td>      
+            <td style="background-color: yellow;">10</td>    
+            </tr>    
+            <tr>      
+            <th>4</th>      
+            <td>2019</td>      
+            <td>210</td>      
+            <td>1</td>    
+            </tr>  
+    </tbody>
+    </table>
 
-1. Check if the number of holds correlates somehow with more appearances in the top ranks of individual branches.
-2. Check if the branch with the highest numbers for the individual title represents too much of the total.
+<p align="center"> <em> table 3: Data availability by year </em> </p>
 
-![train](/assets/posts/library/concentration.png)
+Here we have a clear situation where **2015 and 2016 have more data available than 2017 and 2018** - 2019 is a very limited year concerning data entries, so for further analysis it will be just used in some specific cases. This implies that we should be very cautious when considering some year changes between analysis.
 
-**What is the IDEAL column**: this is a suggestion of what would be the more logical guess (in an IDEAL world) of what the number of appearances **should** be. TL,DR: Before looking to any data, the natural guess here would be that the highest positions in the rank have more appearances in all branches - and it degrades linearly - the further you go in the rank.
+## <a id="intro"> </a>
+## **Intro**
 
-**Whats is concentration in the chart**: The % of which the branch with greater holding numbers for that title, represents in the total number.
+There could be numerous different ways to approach this dataset. My intention here with this analysis is to try finding meaningful patterns with a macro look to the questions. 
 
-Here we can see that, it seems to exist a correlation between number of appearances and the position in the rank of holds, once that the blue bars (REAL) are, in the most part, close to the orange bars (IDEAL). Concerning concentration, 2 things stand out: first, the high number for the third book in the rank _Cambridge IELTs_, with more than 30% concentration in the Millwoods branch (people are trying hard here), and the fact that the top 4-6 has relative greater values than the rest. And, interesting to see that, the last positions in our rank rely a lot more than others in the concentration values to stand out.
+What are the important trends we can explore with confidence using the data we have - and knowing our limitations? 
 
-**In summary**: These books have a lot of appearances, and although they rely more in concentration, the picture here is clear that these books are all time favorites in the majority of the branches.
+What are some practical conclusions we could take from the final thoughts? 
 
-**Conclusion on the top 15 of all time**: Even though the correlation between number of appearances seems to stand, after all of the above, we could add that the first books in the rank (top 6) rely not just on the participation on the majority of the branches but in **record demand** - only such a thing would explain why books with peaks in appearances like _Harry Potter and the curse child_ and _All the light you cannot see_ do not figure higher in the ranks.
+This is my guideline for the investigation you are about to read.
 
-<!-- ---
-_
+# <a id="bsize"> </a>
+## **Understanding branch size**
 
-Before we close the successes part of this analysis: **do you think that, after all of the above, the title _The girl on the train_ represents a perennial and spread phenomena?**
+Before we jump into any type of question or conclusion, there is some elementary understanding we need to have:
 
-I would't rush on this:
+**How are the branches different when concerning the distribution of the holds? is there a high concentration that would give any further analysis a bias?**
 
-![train](/assets/posts/library/moment_trend2.png)
+Answering these questions we can create a clear guideline to further understand the dynamics of the book holdings.
 
-Wait a minute. The top 3, when we take off the equation the title _Cambridge IELTS_ , is all about the moment trend too! _The girl on train_ was launched in 2015 and had it's spike in the same year - almost the same situation for _The life changing magic of tidying up_ which launched in Oct 2014.
-Does it say anything relevant about publication year vs hold numbers?
+<table border="1" class="dataframe">  <thead>    <tr>      <th></th>      <th>total_sum</th>      <th>total_mean</th>      <th>total_median</th>      <th>size_index</th>      <th>%holds</th>    </tr>    <tr>      <th>hold_year</th>      <th></th>      <th></th>      <th></th>      <th></th>      <th></th>    </tr>    <tr>      <th>branch_name</th>      <th></th>      <th></th>      <th></th>      <th></th>      <th></th>    </tr>  </thead>  <tbody>    <tr>      <th>Whitemud Crossing Branch</th>      <td>141714.0</td>      <td>47238.000000</td>      <td>40650.000000</td>      <td>22</td>      <td>9.681155</td>    </tr>    <tr>      <th>Riverbend Branch</th>      <td>123651.0</td>      <td>41217.000000</td>      <td>35626.000000</td>      <td>21</td>      <td>8.447186</td>    </tr>    <tr>      <th>Lois Hole Library</th>      <td>105351.0</td>      <td>35117.000000</td>      <td>32087.000000</td>      <td>20</td>      <td>7.197026</td>    </tr>    <tr>      <th>Mill Woods Branch</th>      <td>105079.0</td>      <td>35026.333333</td>      <td>32192.000000</td>      <td>19</td>      <td>7.178444</td>    </tr>    <tr>      <th>Enterprise Square (Downtown)</th>      <td>96716.0</td>      <td>32238.666667</td>      <td>26129.000000</td>      <td>18</td>      <td>6.607128</td>    </tr>    <tr>      <th>Woodcroft Branch</th>      <td>84589.0</td>      <td>28196.333333</td>      <td>27392.000000</td>      <td>17</td>      <td>5.778675</td>    </tr>    <tr>      <th>Strathcona Branch</th>      <td>83448.0</td>      <td>27816.000000</td>      <td>24838.000000</td>      <td>16</td>      <td>5.700728</td>    </tr>    <tr>      <th>Idylwylde Branch</th>      <td>82838.0</td>      <td>27612.666667</td>      <td>25215.000000</td>      <td>15</td>      <td>5.659056</td>    </tr>    <tr>      <th>Castle Downs Branch</th>      <td>82262.0</td>      <td>27420.666667</td>      <td>25342.000000</td>      <td>14</td>      <td>5.619707</td>    </tr>    <tr>      <th>Jasper Place Branch</th>      <td>77425.0</td>      <td>25808.333333</td>      <td>22878.000000</td>      <td>13</td>      <td>5.289269</td>    </tr>    <tr>      <th>Meadows Branch</th>      <td>68167.0</td>      <td>22722.333333</td>      <td>22528.000000</td>      <td>12</td>      <td>4.656811</td>    </tr>    <tr>      <th>Londonderry Branch</th>      <td>59963.0</td>      <td>19987.666667</td>      <td>19813.000000</td>      <td>11</td>      <td>4.096357</td>    </tr>    <tr>      <th>Capilano Branch</th>      <td>55716.0</td>      <td>18572.000000</td>      <td>17419.000000</td>      <td>10</td>      <td>3.806224</td>    </tr>    <tr>      <th>Clareview Branch</th>      <td>51032.0</td>      <td>17010.666667</td>      <td>17010.666667</td>      <td>9</td>      <td>3.486238</td>    </tr>    <tr>      <th>Calder Branch</th>      <td>43110.0</td>      <td>14370.000000</td>      <td>13457.000000</td>      <td>8</td>      <td>2.945048</td>    </tr>    <tr>      <th>West Henday Promenad (Lewis Estates) Branch</th>      <td>42235.0</td>      <td>14078.333333</td>      <td>14078.333333</td>      <td>7</td>      <td>2.885273</td>    </tr>    <tr>      <th>Highlands Branch</th>      <td>39771.0</td>      <td>13257.000000</td>      <td>13257.000000</td>      <td>6</td>      <td>2.716945</td>    </tr>    <tr>      <th>Sprucewood Branch</th>      <td>33821.0</td>      <td>11273.666667</td>      <td>11273.666667</td>      <td>5</td>      <td>2.310473</td>    </tr>    <tr>      <th>Abbottsfield - Penny McKee Branch</th>      <td>32878.0</td>      <td>10959.333333</td>      <td>10959.333333</td>      <td>4</td>      <td>2.246052</td>    </tr>    <tr>      <th>McConachie Branch</th>      <td>30391.0</td>      <td>10130.333333</td>      <td>10130.333333</td>      <td>3</td>      <td>2.076153</td>    </tr>    <tr>      <th>Heritage Valley</th>      <td>21159.0</td>      <td>7053.000000</td>      <td>765.000000</td>      <td>2</td>      <td>1.445472</td>    </tr>    <tr>      <th>MacEwan University</th>      <td>2497.0</td>      <td>832.333333</td>      <td>784.000000</td>      <td>1</td>      <td>0.170582</td>    </tr>  </tbody></table>
 
-## <a id="publication"> </a>
-## **Publication**
+<p align="center"> <em> table 4: holding numbers and size index by branch </em></p>
 
-Indeed, there are some trends coming and going here:
+Here we have some information concerning the whole period of 2015 to 2019 for the holdings numbers of the branches - ordered by the total holdings. 
 
-![train](/assets/posts/library/pubyear.png)
+Some interesting things:
 
-So here we can see that in 2015, the majority of holds went for books published in previous years. This trend is reversed for the following years - 2016 and 2017. In 2018 the trend is back to books published in previous years. **So, we cannot say that there is a perennial trend here, but something that come as goes - and probably fluctuate with the books that are getting more attention**.
+- Whitemud (9%) and Riverbend (8%) are isolated in the higher positions for the % of total holdings.
+- ***I created the _size index_ for us to use in further analysis and to have the notion of the branch sizes. The bigger the index, the more holding power the branch has.**
 
-What about the this information concerning our top 15:
+When we look to the distribution of the holds by branch we have :
 
-![train](/assets/posts/library/pubyear_title.png)
+|![alou alou](/assets/posts/library/hold_hist.png)
+|:--:|
+|*Image 1: Histogram: distribution of the number of total holdings by branch.*
 
-Here there is the answer we were looking for in the previous section: **the most holden books of all time had the most of their holdings in the years after the publishing.
- -->
+This is not a normal distribution for sure (p-value of 79% for the kurtosis test assuming a normal distribution).
 
-## <a id="fiction"> </a>
-## **We are all about the fiction here**
+Using *table 4* and *image 1* we can see clearly the concentration by some few branches in the top - although I would argue not a very serious one, but an important to keep an eye on - and a good part of the branches are situated in the middle still.
 
-So, what could we discover looking to the preferred genres?
+This is even more clear when we look to the means and medians for the whole period (2015 to 2018):
 
-![train](/assets/posts/library/genre.png)
+|![alou alou](/assets/posts/library/b_means.png)
+|:--:|
+|*Image 2: Means (right) and medians (left) for holdings by branch - ordered by size index*
 
-**Edmonton is all about the fiction**. Almost 7x the number of the second place! But here is where we start with the questions:
+We have the top 4 branches with the higher means and medians, but still a lot of branches in the middle. 
 
-1. Is this a trend that probably will continue?
-2. Is this true for every branch?
+**For further analysis we should, every time we can, look to the size index and investigate the weigh of the top 4 branches in each effect we try to understand.**
 
-#### 1. Is this a trend that probably will continue?
 
-![train](/assets/posts/library/genre_evolution.png)
+## <a id="wave"> </a>
+## **A new wave of book holdings**
 
-Seems as an easy answer: **fiction is doing good, and it will keep going**.
+So, our starting point here would be the following question:
 
-> **Side signal**: there seems to be a good trend on the **variety of genres being featured during the years**. When in 2015 and 2016 we had few bars, in 2018 we seen a lot of different ones, so fiction is great, but the variety is coming, which implies different books being explored.
+**Is the book holdings for the libraries top 10's increasing/decreasing?** 
 
-#### 2. Is this true for every branch?
+Let's plot the graph and see what happens: 
 
-There is one good way to explore this questions: trying to see the evolution - by branch - of the most chosen genre.
+|![alou alou](/assets/posts/library/data_avail_holds.png)
+|:--:|
+|*Image 3: Months of data available by year (left), Total holds by year (right)*
 
-![train](/assets/posts/library/fiction-gif.gif)
+Looking to *Image 3* we can see clearly that, even though we have fewer data in 2017 and 2018, these years have way more holdings than the previous ones. This is a **strong argument** in favor that the holdings indeed had a big spike, once that, logically, we would expect the following relation:
 
-Yes, it is a total fiction domination.
+More data = More holdings -> **not our case here**.
 
-But what about other genres? Let's take off fiction and see what else is dominating the branches:
+The first question here would be: what about if this is a result of _only_ big branches rises in holds?
 
-![train](/assets/posts/library/non-fiction-gif.gif)
+|![alou alou](/assets/posts/library/branch_avail.png)
+|:--:|
+|*Image 4: Data availability vs total holds by year, by branch*
 
-Here we have more interesting patterns:
+Here we can have the overall picture: all branches are experiencing the same effect. This could make us more secure in thinking that, all the reasons and consequences of the great rise in holdings are probably happening in all branches.
 
-1. **2015**: We have drama domination due to _The girl on the train_ success, and only 2 branches picked different genres.
-2. **2016**: The seed of change started growing and we can see Biographies and Juvenile Fiction taking in.
-3. **2017**: Here we have total change with Juvenile Fiction taking almost all branches, with central areas sticking to Biographies.
-4. **2018**: Self-help starts to pop in some different branches - is this the start of something new? (more below).
+|*Important consideration*: you may have noted that we had 3 new branches entering in 2017 - and that could be an important driver for these holdings ,right? But in effect, they are the smallest branches in all aspects even when we normalize it by means and medians (_see Image 2_). And for the whole period, these 3 branches corresponds to less than 3% of the data (_see table 4_). So I would discard this possibility.
 
-## <a id="evolution"> </a>
-## **The self-help effect and genre evolution**
+#### **Where can we go from here?** 
 
-Here we are going to dedicate some space to explore some heatmaps on the evolution of adoption of certain genres (the most popular ones) during time.
+We do not have the demographics and user data to investigate why exactly the holdings had such a rise in 2017, so we could check important questions like:
 
-The self-help effect - spreading strong:
-![train](/assets/posts/library/self-help-gif.gif)
+- Are the number of holdings per user growing? 
+- Is the overall number of users bigger? 
+- What is the main different driver by the user to show this difference?
 
-The drama is gone:
-![train](/assets/posts/library/drama-gif.gif)
+But, once this effect happened, **what patterns can we learn looking inside of it**? **what is the path ahead**? 
 
-Fiction doesn't change:
-![train](/assets/posts/library/fiction2-gif.gif)
+These are the questions we are going to focus on in this analysis.
 
-Biographies too:
-![train](/assets/posts/library/bio-gif.gif)
+
+
+## <a id="genres"> </a>
+## **A tale of 3 stories**
+
+Considering all the years, what would be the most popular genres?
+
+<table border="1" class="dataframe">  <thead>    <tr style="text-align: right;">      <th></th>      <th>total_holds</th>      <th>%total</th>    </tr>    <tr>      <th>genre</th>      <th></th>      <th></th>    </tr>  </thead>  <tbody>    <tr>      <th>Fiction</th>      <td>932804</td>      <td>63.750478</td>    </tr>    <tr>      <th>Biography &amp; Autobiography</th>      <td>100739</td>      <td>6.884790</td>    </tr>    <tr>      <th>Cooking</th>      <td>70164</td>      <td>4.795207</td>    </tr>    <tr>      <th>Self-Help</th>      <td>56262</td>      <td>3.845105</td>    </tr>    <tr>      <th>Psychology</th>      <td>34363</td>      <td>2.348465</td>    </tr>    <tr>      <th>House &amp; Home</th>      <td>27254</td>      <td>1.862616</td>    </tr>    <tr>      <th>Business</th>      <td>25324</td>      <td>1.730714</td>    </tr>    <tr>      <th>Health &amp; Fitness</th>      <td>25217</td>      <td>1.723401</td>    </tr>    <tr>      <th>Foreign Language Study</th>      <td>23838</td>      <td>1.629157</td>    </tr>    <tr>      <th>Political Science</th>      <td>19295</td>      <td>1.318675</td>    </tr>  </tbody></table>
+
+<p align="center"> <em> table 5: Top 10 genres in book holdings </em></p>
+
+
+Fiction it is! 63% of the total holdings and it is way ahead of the second place, Biographies. 
+
+Ok, but would this top 10 be a result of a long term state or are some of these genres growing in recent years? 
+
+|![alou alou](/assets/posts/library/genre_3stories.png)
+|:--:|
+|*Image 5: top 10 genres evolution in the number of holdings by year*
+
+So here, on purpose, I  divided the top 10 into 3 distinct categories:
+
+- **High Growth**: genres that have very expressive holdings evolution from 2015 and above.
+- **Normal Growth**: genres that had growth, but nothing outstanding (comparing to the above).
+- **Decaying** : genres with decaying number of holds from 2015 and above.
+
+Concerning the **Normal Growth** category we could state that it has a high standard of consistent demand for all the years (not different the genres in this category are top 1 and 2). But for further investigation, we are gonna focus on the other 2 categories.
+
+#### **High growth but different circumstances**
+
+Excuse me, but before anything, I would like to zoom in the High Growth category and explore something more closely:
+
+|![alou alou](/assets/posts/library/genre_hgrowth.png)
+|:--:|
+|*Image 6: high growth evolution in the number of holdings by year*
+
+If you remember the content discussed in _Image 3_ you will also remember that we had a very intense spike in the number of holdings from 2016 to 2017. This had an obvious impact on all the genres we are studying in this section. 
+
+But take a closer look in the 2 red circles on _image 6_:
+
+On the left, on what I called _constant high growth_, we can see that these genres were **accelerating even before the spike in holdings**. On the other hand, this is not clear in the right part of the graph: **these genres were static or in some cases even decaying before the bump**. It seems we could have something going on here.
+
+My main mission now is identifying real successes and real rising genres for this group. That said, I would like to see in the desired genre:
+
+- 1) Wide adoption
+- 2) (_optional but good to have_) Variety of titles
+
+**1) Adoption check**
+
+To do this analysis, we will be using the following type of graph (heatmap):
+
+- **On the Y(vertical) axis:** the branches ordered by the higher branch (top) in size, using size index, to the smaller one (bottom).
+- **On the X(horizontal) axis:** the years of analysis.
+- **Metric inside the squares**: % of adoption of that genre in the corresponding year.
+
+|![alou alou](/assets/posts/library/one_heat.png)
+|:--:|
+|*Image 7: Fiction adoption by branch - Heatmap*
+
+_Image 7_ is just a training for us to look for the genres in high growth. I used the Fiction genre just to show the interpretation:
+
+- Darker colors represent more adoption
+- The superior part of the graph represents the bigger branches
+
+For Fiction, we can notice the crescent predominance of lighter colors with the passing of the years, which would imply that the adoption rate of fiction is decaying - with this effect being more effective on the bottom part, which states that fiction is less adopted in smaller branches and this is intensifying during the years.
+
+Now we are trained to look to the High Growth genres and answer: is there wide adoption for all these genres?
+
+|![alou alou](/assets/posts/library/high_heat1.png)
+|:--:|
+|*Image 8: Constant High Growth genres adoption by branch - Heatmap*
+
+|![alou alou](/assets/posts/library/high_heat2.png)
+|:--:|
+|*Image 9: Eventual High Growth genres adoption by branch - Heatmap*
+
+When comparing _image 8_ and _image 9_, it is clear we are seeing two different patterns here:
+
+- **Constant High Growth** genres (image 8) shows us a more widespread adoption, mainly if you look to self-help and cooking, you can see the evolution of adoption happening in all branches. With psychology too, but we would say that is more adopted in the very top and bottom - not as much in the middle.
+
+- **Eventual High Growth** genres (image 9) confirm what would be our more logical guess: they 'surfed' in the spike and are way more concentred events. If we take a look to health & fitness and political science, they are bottom and top concentrations respectively.
+
+For the adoption it would be reasonable to assume that the _constant high growth_ group is a spread phenomenon, when the _eventual_ group is not.
+
+**2) Variety check**
+
+Before the verdict, let's just take a look at the possibility of an individual title (or a small group of them), is influencing this results by genre:
+
+|![alou alou](/assets/posts/library/scatt_1.png)
+|:--:|
+|*Image 10: Constant Growth % of adoption by title by year, by genre*
+
+|![alou alou](/assets/posts/library/scatt_2.png)
+|:--:|
+|*Image 11: Eventual Growth % of adoption by title by year, by genre*
+
+The annotated titles with their correspondent % of adoption represent the title with more adoption by year.
+
+That said, we can see that the picture for both *constant* and *eventual* growth genres have a clear pattern:
+
+**Concentration for the more adopted titles for each genre is decaying with the pass of time**. This means that besides being adopted in many branches, these genres are experiencing a more variety of titles being demanded, which could imply in a more solid and long term trend for these genres getting even more traction.
+
+> Considering these 2 points explored above, I would say that the **Constant Growth Genres are the safest picks for the real growth genres**. The eventual - as the name suggests - show genres that are surfing the higher number of holds but do not show any characteristic to continue performing in the long term.
+
+#### **Constant High Growth Domination**
+
+Let's take a look into the dissemination of the Constant High Growth genres geographically:
+
+|Cooking linear adoption (%) by years
+|:--:|
+|![](/assets/posts/library/cooking_gif.gif)
+
+|Self-Help linear adoption (%) by years
+|:--:|
+|![](/assets/posts/library/self_gif.gif)
+
+|Psychology linear adoption (%) by years
+|:--:|
+|![](/assets/posts/library/psy_gif.gif)
+
+
+#### **Marie Kondo and English hustlers**
+
+|![alou alou](/assets/posts/library/low_heat.png)
+|:--:|
+|*Image 12: Decaying High Growth genres adoption by branch - Heatmap*
+
+So we could see that House & Home was a past widespread event in all branches, but Foreign Language study was very Millwoods and Meadows effect. 
+
+What about the titles?
+
+|![alou alou](/assets/posts/library/scatt_3.png)
+|:--:|
+|*Image 13: House & Home% of adoption by title by year, by genre*
+
+Here we have Marie Kondo effect: this genre probably is featured in the top 10 ranks because of Marie Kondos's book and is leaving it because of the same reason.
+
+For Foreign Language Study, Cambridge IELTS just dominated all the years. 
+
+## <a id="small"> </a>
+## **Diversity is in the small .. at first**
+
+Once we have already explored a lot of diversity concerning genres, here is the final graph that would be enlightening for this purpose:
+
+|![alou alou](/assets/posts/library/diver_heat.png)
+|:--:|
+|*Image 14: Genre diversity on the Top 10's by branch heatmap*
+
+Here we can see a spread and crescent diversification happening in all the top 10's in the branches, with a more strong effect happening **first on the smallest branches and coming to bigger ones (in the top)**.
+
+So, diversification - with more holding numbers - is the name of the scene here.
+
+## <a id="fail"> </a>
+## **Failed attempts**
+
+Here I am going to reveal some failed attempts to explore some aspects of the data.
+
+#### Google Books Rating Score
+
+One of the data I brought using the Google Books API was the Google Books Rating ( metric: from 0 to 5, the higher the better). 
+
+Even though this implies in an interesting feature to help to explore this dataset, here we had 2 problems: 
+
+- 25% of all the data didn't have a valid google rating (for the specific titles).
+- Is was not very conclusive when applied to the data.
+
+|![alou alou](/assets/posts/library/google.png)
+|:--:|
+|*Image 14: google Books rating vs total number of holds, by genre type*
+
+If we do not consider the outliers, it would make some sense until rating 4 - the number of holds is growing with the rating. But after that, it just drops and goes the other way around. 
+
+Another point here is that the majority of holding successes are located in the 3.0 to 4.0 - which is good - but why not in the 5.0's? This only showed to me that there was another important feature working around here than the rating.
+
+#### Publishing Year
+
+Another point that I tried to investigate was the publishing year, mainly with this question: Are newer books helping the book holdings grow? Are there preferences for older books or brand new published books?
+
+Here is the graph:
+
+|![alou alou](/assets/posts/library/pubs.png)
+|:--:|
+|*Image 14: total number of holds divided by books published in that same year or prior*
+
+Although we can identify some yeas where new books were preferred, and others where it was not, the difference is very sutil.
+
+When considering all the years is almost impossible to find a year where the most preferred scenario - older books or newer ones - had more than 55% of the preference. Which is the majority but not very satisfying for a clear choice right? 
+
+I have to mention too that this graph - image 14 - helped me to see that the holding number spike was not caused by brand new books too.
 
 ## <a id="conclusion"> </a>
-## **(Sort of) Conclusion**
+## **Conclusion**
 
-We did explore a lot of things here, so we could point some highlights for conclusion:
+We did explore a lot of things here, so we could point some highlights for the conclusion:
 
-1. **Trends come from momentary high demand** : we could see that the top books have high number of holds but they change quickly during the years - _The girl on the train_ was the motive drama was so hot in 2015, but after that the genre just tanked.
+1. **The number of holdings exploded**: the data is clear that the number of holdings had a great spike - even though with this data we are not capable of exploring exactly why.
 
-2. **Fiction Domination** : fiction is dominating the genre dispute by far. And the trend is continuing - in all branches. And better: the move is spread and unpredictable.
+2. **Diversification is the name of the game**: we could see in numerous ways that the diversification movement is happening all along the branches.
 
-3. **Genre diversification** : we could see a good trend developing in the last years that the number of genres being featured in the ranks are growing.
+3. **In the small is the seed**: we could also see that it is in the smallest branches that diversity is happening faster.
 
-4. **Self-help effect** : when we take fiction off the genre analysis, we could see juvenile fiction and biographies dominating the branches during 2016 and 2017. But the same trend that made this is giving self-help a good momentum and it seems that the future is all about being a better human being - rather than reading fiction.
+4. **Is all about the mind, and then food**: exploring the most prominent genres, we could identify that self-help, psychology, and cooking are the safest candidates to pick on fiction - maybe someday - being widely adopted and with consistent growth and diversification during the years.
 
 
 That's all by now!
-Thank you.
+Thank you.<br>
 **Fernando**
