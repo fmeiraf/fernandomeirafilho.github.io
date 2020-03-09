@@ -13,7 +13,7 @@ categories: jekyll update
 >_I got the idea to explore this dataset on the [BetaCityYEG Meetup](https://www.meetup.com/startupedmonton/events/vppzhrybcdbjc/) Community Bulletin Board of Tech Projects. If you are in Edmonton and want to start working in some interesting projects for the city, you should definetly check it out._
 
 ---
-_
+-
 - [The Data](#data)
 - [Intro](#intro)
 - [Understanding branch size](#bsize)
@@ -38,7 +38,7 @@ This implies that these additional features are not 100% accurate, but it was th
 
 <table border="1" width="200" class="dataframe">
     <thead>
-        <tr style="text-align: center; height:50%; font-size:15px;">
+        <tr style="text-align: center; height:50%; font-size:13px;">
             <th></th>      
             <th>row_id</th>      
             <th>branch_id</th>      
@@ -55,16 +55,16 @@ This implies that these additional features are not 100% accurate, but it was th
             </tr>  
         </thead>  
         <tbody >    
-            <tr style="text-align: center; height:50%; font-size:13px;">      
+            <tr style="text-align: center; height:50%; font-size:12px;">      
                 <th>0</th>      
-                <td >EPLLON20150316The girl on the train / Paula Hawkins</td>      
+                <td >EPLLON20150..</td>      
                 <td >EPLLON</td>      
                 <td>Londonderry Branch</td>      
                 <td>36</td>      
-                <td >The girl on the train</td>      
+                <td >The girl on ..</td>      
                 <td>Hawkins Paula</td>      
                 <td>2015-03-16</td>     
-                 <td >http://epl.bibliocommons.com/search?t=smart&amp;q=the%20girl%20on</td>      
+                 <td >http://w..</td>      
                  <td>3.5</td>      
                  <td>2015.0</td>      
                  <td>Fiction</td>      
@@ -250,7 +250,7 @@ This is even more clear when we look to the means and medians for the whole peri
 
 |![alou alou](/assets/posts/library/b_means.png)
 |:--:|
-|*Image 2: Means (right) and medians (left) for holdings by branch - ordered by size index*
+|*Image 2: Yearly Means (right) and yearly medians (left) for holdings by branch (2015-2018) - ordered by size index*
 
 We have the top 4 branches with the higher means and medians, but still a lot of branches in the middle. 
 
@@ -500,6 +500,6 @@ We did explore a lot of things here, so we could point some highlights for the c
 4. **Is all about the mind, and then food**: exploring the most prominent genres, we could identify that self-help, psychology, and cooking are the safest candidates to pick on fiction - maybe someday - being widely adopted and with consistent growth and diversification during the years.
 
 
-That's all by now!
+That's all for now!
 Thank you.<br>
 **Fernando**
