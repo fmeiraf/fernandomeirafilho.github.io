@@ -31,7 +31,7 @@ linkedin_username: luiz-fernando-meira-filho-5267664a
 blurb: from data to dev and beyond!
 
 # Build settings
-theme: minima
+theme: jekyll-theme-cayman
 plugins:
   - jekyll-feed
 
