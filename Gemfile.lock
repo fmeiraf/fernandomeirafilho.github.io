@@ -245,6 +245,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  commonmarker
   github-pages
   jekyll-feed (~> 0.12)
   minima (~> 2.5)

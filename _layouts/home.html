@@ -2,37 +2,52 @@
 layout: default
 ---
 
-<div class="home">
+<div class="home" style="color: #414244">
   {%- if page.title -%}
-    <h1 class="page-heading">{{ page.title }}</h1>
+  <h1 class="page-heading">{{ page.title }}</h1>
   {%- endif -%}
 
   <div class="outer-jumbo">
-
-     <div class="jumbotron">
-        <div class="jumbotron-pic">
-          <img src="/assets/imgs/face1.png" alt="">
-        </div>
-        <div class="jumbotron-intro">
-          <h1>Hello, I'm&nbsp;<span style="font-weight:500; color:#283149">Fernando</span></h1>
-          <p>I love working with <strong>data products</strong> and <strong> data analysis</strong>  and sometimes and I venture myself
-            in some <strong> web dev projects</strong> . In my spare time
-            I like to learn new technologies and watch eSports ;) Nice to meet you!
-          </p>
-        </div>
-      </div><!-- end jumbotron -->
+    <div class="jumbotron">
+      <div class="jumbotron-pic">
+        <img src="/assets/imgs/shirt-cartoonv3.jpeg" alt="" />
+      </div>
+      <div class="jumbotron-intro">
+        <h1>
+          Hello, I'm&nbsp;<span style="font-weight: 500; color: #414244"
+            >Fernando</span
+          >
+        </h1>
+        <p>
+          I love <strong>coding.</strong> I like <strong> data</strong>. I use
+          both to understand and create things that interest me - which these
+          days are mostly related to the <strong>crypto</strong> space.
+        </p>
+      </div>
+    </div>
+    <!-- end jumbotron -->
 
     <div class="centered-buttons">
-      <p>Check out my most recent work in:</p>
       <div class="inner-centered">
         <div class="row">
-          <div class="column"><a id="btn-odd"  href="/blog/">Data Analysis & Writing</a></div>
-          <div class="column"><a id="btn-even"  href="/projects/">Projects</a></div>
+          <div class="column">
+            <a href="/blog/">
+              <h2>
+                Articles
+                <img class="icon" src="/assets/imgs/articlesIcon.png" />
+              </h2>
+            </a>
+          </div>
+          <div class="column">
+            <a href="/projects/">
+              <h2>
+                Projects
+                <img class="icon" src="/assets/imgs/projectsIcon.png" />
+              </h2>
+            </a>
+          </div>
         </div>
       </div>
     </div>
-
   </div>
-
-
 </div>

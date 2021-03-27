@@ -4,7 +4,7 @@
 main:
   - title: "Projects"
     url: /projects/
-  - title: "Data Analysis & Writing"
+  - title: "Writing"
     url: /blog/
   - title: "About"
     url: /about/
