@@ -21,7 +21,7 @@
 title: Fernando Meira
 email: fmeira.filho@gmail.com
 description: > # this means to ignore newlines until "baseurl:"
-  Using tech and data to follow interests. :)
+  Using tech and data to follow what interest me.
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "" # the base hostname & protocol for your site, e.g. http://example.com
 twitter_username: fmeiraf
@@ -30,7 +30,7 @@ linkedin_username: luiz-fernando-meira-filho-5267664a
 blurb: from data to dev and beyond!
 
 # Build settings
-theme: jekyll-theme-cayman
+theme: minima
 plugins:
   - jekyll-feed
 # Exclude from processing.
