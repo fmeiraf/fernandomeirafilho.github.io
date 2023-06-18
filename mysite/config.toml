@@ -11,23 +11,23 @@ theme = "hugo-digital-garden-theme"
 
   [[params.social]]
     name = "Twitter"
-    link = "#"
+    link = "https://twitter.com/fmeiraf"
     icon = "fab fa-twitter"
 
   [[params.social]]
     name = "Github"
-    link = "#"
+    link = "https://github.com/fmeiraf"
     icon = "fab fa-github"
 
   [[params.social]]
     name = "LinkedIn"
-    link = "#"
+    link = "https://www.linkedin.com/in/luiz-fernando-meira-filho-5267664a/"
     icon = "fab fa-linkedin-in"
 
 
 [menu]
   [[menu.main]]
-    name = "Articles"
+    name = "Writing"
     url = "/garden/"
     weight = 1
   [[menu.main]]
