@@ -1,65 +1,50 @@
-baseURL = 'http://example.org/'
-languageCode = 'en-us'
-title = 'Fernando.M'
-theme = "hugo-digital-garden-theme"
+baseURL = "http://example.org/"
+defaultContentLanguage = "en"
+languageCode = "en"
+
+title = "Fernando Meira"
+
+theme = "gokarna"
+
+# Automatically generate robots.txt
+enableRobotsTXT = true
 
 [params]
-  name = "Fernando Meira"
-  description = "Having fun writing code. :)"
-  initials = "FM"
-  googleAnalytics = ""
-
-  [[params.social]]
-    name = "Twitter"
-    link = "https://twitter.com/fmeiraf"
-    icon = "fab fa-twitter"
-
-  [[params.social]]
-    name = "Github"
-    link = "https://github.com/fmeiraf"
-    icon = "fab fa-github"
-
-  [[params.social]]
-    name = "LinkedIn"
-    link = "https://www.linkedin.com/in/luiz-fernando-meira-filho-5267664a/"
-    icon = "fab fa-linkedin-in"
-
+  footer = "Fernando Meira"
+  description = "Having fun writing code ( and/or jamming with AI lol)"
+  avatarURL = "/images/profile_pic.png"
+  AvatarAltText = "yo mountains ;)"
+  avatarSize = "size-m"
+  socialIcons = [
+    {name = "twitter", url = "https://twitter.com/fmeiraf"},
+    {name = "linkedin", url = "https://www.linkedin.com/in/luiz-fernando-meira-filho-5267664a/"},
+     {name = "github", url = "https://github.com/fmeiraf"},
+    {name = "email", url = "mailto:fmeira.filho@gmail.com"}
+  ]
 
 [menu]
   [[menu.main]]
-    name = "Writing"
-    url = "/garden/"
+    name = "Posts"
+    pre = "<span data-feather='book'></span>"
+    url = "/posts/"
     weight = 1
+
   [[menu.main]]
     name = "Projects"
+    pre = "<span data-feather='code'></span>"
     url = "/projects/"
     weight = 2
+
   [[menu.main]]
     name = "About"
+    pre = "<span data-feather='tag'></span>"
     url = "/about/"
     weight = 3
-
     
-
-
-[taxonomies]
-  article_tags = 'article_tags'
-  project_tags = 'project_tags'
-  library_tags = 'library_tags'
-
-
-[markup]
-  defaultMarkdownHandler = 'goldmark'
-  [markup.goldmark.renderer]
-    unsafe = true
-  [markup.goldmark.extensions]
-    definitionList = true
-    footnote = true
-    linkify = true
-    strikethrough = true
-    table = true
-    taskList = true
-    typographer = true
-  [markup.highlight]
-    # Choose from https://xyproto.github.io/splash/docs/all.html
-    style = 'monokailight'
+  [[menu.main]]
+    identifier = "github"
+    url = "https://github.com/fmeiraf"
+    weight = 4
+    
+    # We use feather-icons: https://feathericons.com/
+    pre = "<span data-feather='github'></span>"
