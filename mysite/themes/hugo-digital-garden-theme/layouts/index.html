@@ -27,7 +27,7 @@
 				{{ end }}
       		</div>
 			{{ with .Site.GetPage "section" "garden" }}
-			<div class="d-flex flex-row-reverse">
+			<div class="d-flex">
         		<a href="{{ .RelPermalink }}" role="button" class="btn btn-sm see-all">See all articles</a>
       		</div>
       		{{ end }}
@@ -49,7 +49,7 @@
 				{{end}}
     		</div>
 			{{ with .Site.GetPage "section" "projects" }}
-			<div class="d-flex flex-row-reverse">
+			<div class="d-flex">
 				<a href="{{ .RelPermalink }}" role="button" class="btn btn-sm see-all">See all projects</a>
 			</div>    
 			{{ end }}
