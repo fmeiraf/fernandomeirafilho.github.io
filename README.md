@@ -1,6 +1,6 @@
 ## Original site
 
-Live here: [fmeira.com](http://fmeira.com/)
+Live here: [www.fmeira.com](http://www.fmeira.com/)
 
 ## Steps to debug
 
