@@ -3,12 +3,12 @@ title: "About"
 type: page
 ---
 
-Hi, I'm Fernando ;)
+Hi, I'm **Fernando** ;)
 
-I'm a data scientist working at LawDepot.com. I love building things with code and even after 8+ years doing it, I still find it magical to deploy a website with a couple of files and a simple server.
+I'm currently working as data scientist. I love building data apps and I have been working for the last 5 years applying ML models to a buch of different business problems.
 
-Fun Facts:
+What I am currently working with:
 
-- I am a huge e-sports fan.
-- I can't drive without music on (\m/).
-- I fight my lawn every spring but can't make it look good (still trying..).
+- NLP: keyword search + word embeddings + hierachical clustering
+- A bunch o tabular models (XGBoost ftw!)
+- LLM funny experiments (calling APIs 😎)

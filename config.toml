@@ -11,7 +11,7 @@ enableRobotsTXT = true
 
 [params]
   footer = "Fernando Meira"
-  description = "Having fun writing code ( and/or jamming with AI lol)"
+  description = "Having fun writing code ( AI season 🤖)"
   avatarURL = "/images/profile_pic.png"
   AvatarAltText = "yo mountains ;)"
   avatarSize = "size-m"
