@@ -10,9 +10,9 @@ showTableOfContents: true
 
 ### The start and motivations
 
-It's AI season, folks! 🚀
+It's AI season! 🚀
 
-Jumping on this bandwagon, I decided to build [BanQstream](www.banqstream.com). This is an attempt to create a finance/budgeting assistant - something I wanted for myself to get rid (finally) of my spreadsheets. My primary aim this season? Dive deep into LLMs and see what they've got to offer.
+Jumping on this bandwagon, I decided to build [BanQstream](www.banqstream.com). This is an attempt to create a finance/budgeting assistant - something I wanted for myself to get rid (finally) of my spreadsheets. My primary aim withy this project is to dive deep into LLMs and see what they've got to offer.
 
 This is what [BanQstream](www.banqstream.com) can do right now:
 
@@ -26,7 +26,7 @@ This is what [BanQstream](www.banqstream.com) can do right now:
 
 ### Next Steps
 
-TThis project is my playground to experiment with LLM applications across various challenges. Currently, I'm intrigued by:
+This project is my playground to experiment with LLM applications across various challenges. Currently, I'm intrigued by:
 
 - Basic LLM functionalities.
 - Embedding + ANN + clustering.
@@ -35,5 +35,6 @@ TThis project is my playground to experiment with LLM applications across variou
 And here are the possible next steps for this project (although, a heads up, not all may see the light of day):
 
 - Design a dedicated UI, possibly with fastAPI and React.
+- Make data parsing faster (maybe experiment with different models?)
 - Experiment with fine-tuned models for the AI assistant.
 - Enhance the UI with added functionalities for editing transactions.

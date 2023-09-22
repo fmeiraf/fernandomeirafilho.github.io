@@ -29,6 +29,7 @@ This is an attempt to create a finance/budgeting assistant. This will be using L
 
 ### To-Do
 
-- Create its own UI (probably using fastAPI + React)
-- Try finetuned models for the AI assistant
-- Add more functionalites on UI for editing transactions
+- Design a dedicated UI, possibly with fastAPI and React.
+- Make data parsing faster (maybe experiment with different models?)
+- Experiment with fine-tuned models for the AI assistant.
+- Enhance the UI with added functionalities for editing transactions.
