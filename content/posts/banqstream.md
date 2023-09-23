@@ -1,6 +1,6 @@
 ---
 title: "Introducing new pet project: BanQstream"
-date: 2023-09-05T17:55:28+08:00
+date: 2023-09-22T17:55:28+08:00
 description: "Introducing my new project: BanQstream."
 tags: ["projects"]
 type: post
@@ -22,7 +22,9 @@ This is what [BanQstream](www.banqstream.com) can do right now:
 - Suggest spending categories for your transactions.
 - Ask questions about your finances! Fetch answers and visual breakdowns of all your transactions stored on **BanQstream**.
 
-### Quick demo on current functionalities
+### AI assistant clip
+
+[Click here to see quick demo of the AI assistant feature](https://youtu.be/5y9Niz_-N10)
 
 ### Next Steps
 
