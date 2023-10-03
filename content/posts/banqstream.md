@@ -38,7 +38,7 @@ I will need to move to Javascript with the front end to solve this.
 
 **A tip**
 
-If you are creating ML apps - even for API wrappers - I would totally recommend that you check the cached functions ([st.cache_data](https://docs.streamlit.io/library/api-reference/performance/st.cache_data) and [st.cache_resource](https://docs.streamlit.io/library/api-reference/performance/st.cache_resource)). This will speed up the experience of your users (and prevent you for running a bunch of unecessary calls).
+If you are creating ML apps - and/or API wrappers - I would totally recommend that you check the cached functions ([st.cache_data](https://docs.streamlit.io/library/api-reference/performance/st.cache_data) and [st.cache_resource](https://docs.streamlit.io/library/api-reference/performance/st.cache_resource)). This will speed up the experience of your users (and prevent you for running a bunch of unecessary calls).
 
 ### Using OpenAI
 
