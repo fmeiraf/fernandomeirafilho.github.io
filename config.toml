@@ -10,41 +10,43 @@ theme = "gokarna"
 enableRobotsTXT = true
 
 [params]
-  footer = "Fernando Meira"
-  description = "Having fun writing code ( AI season 🤖)"
-  avatarURL = "/images/profile_pic.png"
-  AvatarAltText = "yo mountains ;)"
-  avatarSize = "size-m"
-  socialIcons = [
-    {name = "twitter", url = "https://twitter.com/fmeiraf"},
-    {name = "linkedin", url = "https://www.linkedin.com/in/luiz-fernando-meira-filho-5267664a/"},
-     {name = "github", url = "https://github.com/fmeiraf"},
-    {name = "email", url = "mailto:fmeira.filho@gmail.com"}
-  ]
+footer = "Fernando Meira"
+description = "Having fun writing code ( AI season 🤖)"
+avatarURL = "/images/profile_pic.png"
+AvatarAltText = "yo mountains ;)"
+avatarSize = "size-m"
+socialIcons = [
+  { name = "twitter", url = "https://twitter.com/fmeiraf" },
+  { name = "linkedin", url = "https://www.linkedin.com/in/luiz-fernando-meira-filho-5267664a/" },
+  { name = "github", url = "https://github.com/fmeiraf" },
+  { name = "email", url = "mailto:fmeira.filho@gmail.com" },
+]
+ShowPostsOnHomePage = "recent"
+
 
 [menu]
-  [[menu.main]]
-    name = "Posts"
-    pre = "<span data-feather='book'></span>"
-    url = "/posts/"
-    weight = 1
+[[menu.main]]
+name = "Posts"
+pre = "<span data-feather='book'></span>"
+url = "/posts/"
+weight = 1
 
-  [[menu.main]]
-    name = "Projects"
-    pre = "<span data-feather='code'></span>"
-    url = "/projects/"
-    weight = 2
+[[menu.main]]
+name = "Projects"
+pre = "<span data-feather='code'></span>"
+url = "/projects/"
+weight = 2
 
-  [[menu.main]]
-    name = "About"
-    pre = "<span data-feather='tag'></span>"
-    url = "/about/"
-    weight = 3
-    
-  [[menu.main]]
-    identifier = "github"
-    url = "https://github.com/fmeiraf"
-    weight = 4
-    
-    # We use feather-icons: https://feathericons.com/
-    pre = "<span data-feather='github'></span>"
+[[menu.main]]
+name = "About"
+pre = "<span data-feather='tag'></span>"
+url = "/about/"
+weight = 3
+
+[[menu.main]]
+identifier = "github"
+url = "https://github.com/fmeiraf"
+weight = 4
+
+# We use feather-icons: https://feathericons.com/
+pre = "<span data-feather='github'></span>"
